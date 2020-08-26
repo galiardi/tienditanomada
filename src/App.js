@@ -59,7 +59,7 @@ function App() {
   return (
     <Router>
 
-      <Navigation logout={logout} />
+      <Navigation logout={logout} actualUser={actualUser} />
       {/*<Home googleClick={handleGoogleClick} />*/}
 
       <div className="container p-4">

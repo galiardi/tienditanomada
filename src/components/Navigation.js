@@ -4,6 +4,16 @@ import './Navigation.css';
 import { Link } from 'react-router-dom'
 const Navigation = (props) => {
 
+  const { actualUser } = props;
+
+  let firstName = false;
+
+  if (actualUser) {
+    const userName = actualUser.displayName;
+    firstName = userName.slice(0, userName.indexOf(' '));
+  }
+
+
   const logout = (e) => {
     e.preventDefault();
     props.logout();
@@ -19,7 +29,7 @@ const Navigation = (props) => {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav" className="colapso">
         <Nav className="mr-auto">
-          <Nav.Link href="#home">home</Nav.Link>
+          <p>Hola {firstName}</p>
           <p onClick={logout}>logout</p>
           <NavDropdown title="dropdown" id="basic-nav-dropdown">
             <NavDropdown.Item href="#action/3.1">action</NavDropdown.Item>
