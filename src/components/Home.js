@@ -1,6 +1,8 @@
 import React from 'react'
 import Carrusel from './Carrusel'
 import './Home.css'
+import { ToastContainer } from 'react-toastify';
+
 
 
 export default function Home(props) {
@@ -9,6 +11,11 @@ export default function Home(props) {
   const googleSignin = e => {
     e.preventDefault();
     props.googleSignin();
+  }
+
+  const facebookSignin = e => {
+    e.preventDefault();
+    props.facebookSignin();
   }
 
   return (
@@ -21,7 +28,7 @@ export default function Home(props) {
       }
       {actualUser ?
         null
-        : <button className="btn btn-primary btn-block ">Ingresa con facebook</button>
+        : <button onClick={facebookSignin} className="btn btn-primary btn-block ">Ingresa con facebook</button>
       }
 
       <div className="principal">
@@ -38,6 +45,8 @@ export default function Home(props) {
         <i className="material-icons">home</i>
         <i className="material-icons">home</i>
       </div>
+      <ToastContainer />
     </div>
   )
 }
+

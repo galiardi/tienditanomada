@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { fb, googleProvider } from './firebase'
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { fb, googleProvider, facebookProvider } from './firebase'
 
 import Navigation from './components/Navigation'
 import Test from './components/Test'
@@ -21,15 +23,14 @@ function App() {
         setActualUser(false);
         console.log('No hay un usuario registrado.');
       };
-    })
-  }
+    });
+  };
 
 
+  //google signin
   const googleSignin = () => {
 
-    const provider = googleProvider;
-
-    fb.auth().signInWithPopup(provider)
+    fb.auth().signInWithPopup(googleProvider)
       .then(result => {
         const token = result.credential.accessToken;
         const user = result.user;
@@ -49,6 +50,31 @@ function App() {
       });
   };
 
+  //facebook signin
+  const facebookSignin = () => {
+
+    fb.auth().signInWithPopup(facebookProvider)
+      .then(function (result) {
+        //const token = result.credential.accessToken;
+        const user = result.user;
+        console.log(user)
+      })
+      .catch(function (error) {
+        const errorCode = error.code;
+        const email = error.email;
+        console.log(errorCode, email);
+        if (errorCode === 'auth/account-exists-with-different-credential') {
+          console.log('Inicia sesión con google');
+          toast(`Inicia sesion con google.\n${error.email} se ha registrado con google.`, {
+            type: "info",
+            autoClose: 5000
+          });
+        }
+
+      });
+  }
+
+  //logout
   const logout = () => {
     fb.auth().signOut()
       .then(() => {
@@ -58,12 +84,11 @@ function App() {
 
   return (
     <Router>
-
       <Navigation logout={logout} actualUser={actualUser} />
       {/*<Home googleClick={handleGoogleClick} />*/}
 
       <div className="container p-4">
-        <Route path="/" exact component={() => <Home googleSignin={googleSignin} actualUser={actualUser} />} />
+        <Route path="/" exact component={() => <Home googleSignin={googleSignin} facebookSignin={facebookSignin} actualUser={actualUser} />} />
         <Route path="/edit/:id" component={Test} />
         <Route path="/create" component={Test} />
         <Route path="/user" component={Test} />
