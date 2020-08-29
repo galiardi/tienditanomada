@@ -1,7 +1,6 @@
 import React from 'react'
 import Carrusel from './Carrusel'
 import './Home.css'
-import { ToastContainer } from 'react-toastify';
 
 
 
@@ -45,7 +44,7 @@ export default function Home(props) {
         <i className="material-icons">home</i>
         <i className="material-icons">home</i>
       </div>
-      <ToastContainer />
+
     </div>
   )
 }

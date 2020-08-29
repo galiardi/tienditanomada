@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { fb, googleProvider, facebookProvider } from './firebase'
 
 import Navigation from './components/Navigation'
 import Test from './components/Test'
 import Home from './components/Home'
-
+import ErrorModal from './components/ErrorModal'
 
 function App() {
 
   const [actualUser, setActualUser] = useState(false);
+  const [showFacebookModal, setShowFacebookModal] = useState([false, ""]);
+  useEffect(() => { console.log(showFacebookModal) }, [showFacebookModal]);
 
   //observador de usuario actual
   useEffect(() => { authWatcher() }, []);
@@ -65,10 +65,11 @@ function App() {
         console.log(errorCode, email);
         if (errorCode === 'auth/account-exists-with-different-credential') {
           console.log('Inicia sesión con google');
-          toast(`Inicia sesion con google.\n${error.email} se ha registrado con google.`, {
+          setShowFacebookModal([true, email]);
+          /*toast(`Inicia sesion con google.\n${error.email} se ha registrado con google.`, {
             type: "info",
             autoClose: 5000
-          });
+          });*/
         }
 
       });
@@ -85,7 +86,6 @@ function App() {
   return (
     <Router>
       <Navigation logout={logout} actualUser={actualUser} />
-      {/*<Home googleClick={handleGoogleClick} />*/}
 
       <div className="container p-4">
         <Route path="/" exact component={() => <Home googleSignin={googleSignin} facebookSignin={facebookSignin} actualUser={actualUser} />} />
@@ -93,6 +93,8 @@ function App() {
         <Route path="/create" component={Test} />
         <Route path="/user" component={Test} />
       </div>
+
+      <ErrorModal show={showFacebookModal} googleSignin={googleSignin} />
     </Router>
 
   );
